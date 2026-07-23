@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-HOST="${VLLM_HOST:-127.0.0.1}"
+HOST="${VLLM_CHECK_HOST:-::1}"
 PORT="${VLLM_PORT:-8000}"
 MODEL_NAME="${MODEL_NAME:-qwen3.6-35b-a3b}"
-BASE_URL="http://${HOST}:${PORT}"
+
+if [[ "${HOST}" == *:* && "${HOST}" != \[*\] ]]; then
+  URL_HOST="[${HOST}]"
+else
+  URL_HOST="${HOST}"
+fi
+
+BASE_URL="http://${URL_HOST}:${PORT}"
 
 echo "Checking health: ${BASE_URL}/health"
 curl -fsS "${BASE_URL}/health" >/dev/null

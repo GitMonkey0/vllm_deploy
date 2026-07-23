@@ -7,7 +7,7 @@ Deploy `/opt/tiger/agihub_model_images/Qwen3.6-35B-A3B` with vLLM on Ascend NPU.
 - `vllm`: `0.23.0`
 - `torch_npu`: `2.10.0.post2`
 - Device: 2 x Ascend `910B2C`
-- API: OpenAI-compatible server on port `8000`
+- API: OpenAI-compatible server on IPv6 port `8000`
 
 ## Start
 
@@ -24,8 +24,10 @@ qwen3.6-35b-a3b
 Default endpoint:
 
 ```text
-http://127.0.0.1:8000
+http://[::1]:8000
 ```
+
+The server binds to `::` by default, so it is exposed on IPv6.
 
 ## Verify
 
@@ -47,6 +49,7 @@ The verification request disables thinking with:
 
 ```bash
 VLLM_PORT=8001 ./start_vllm_npu.sh
+VLLM_HOST='::' ./start_vllm_npu.sh
 MODEL_PATH=/path/to/model ./start_vllm_npu.sh
 ASCEND_VISIBLE_DEVICES=0,1 ./start_vllm_npu.sh
 MAX_MODEL_LEN=16384 ./start_vllm_npu.sh
@@ -55,7 +58,7 @@ MAX_MODEL_LEN=16384 ./start_vllm_npu.sh
 ## Manual Request
 
 ```bash
-curl http://127.0.0.1:8000/v1/chat/completions \
+curl 'http://[::1]:8000/v1/chat/completions' \
   -H 'Content-Type: application/json' \
   -d '{
     "model": "qwen3.6-35b-a3b",
