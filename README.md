@@ -29,6 +29,16 @@ http://[::1]:8000
 
 The server binds to `::` by default, so it is exposed on IPv6.
 
+Automatic OpenAI-compatible tool calling is enabled by default with:
+
+```bash
+--enable-auto-tool-choice --tool-call-parser qwen3_xml
+```
+
+The startup script does not set `--max-model-len`, `--max-num-seqs`, or
+`--max-num-batched-tokens` unless the corresponding environment variable is
+provided.
+
 ## Verify
 
 ```bash
@@ -52,7 +62,7 @@ VLLM_PORT=8001 ./start_vllm_npu.sh
 VLLM_HOST='::' ./start_vllm_npu.sh
 MODEL_PATH=/path/to/model ./start_vllm_npu.sh
 ASCEND_VISIBLE_DEVICES=0,1 ./start_vllm_npu.sh
-MAX_MODEL_LEN=16384 ./start_vllm_npu.sh
+TOOL_CALL_PARSER=qwen3_xml ./start_vllm_npu.sh
 ```
 
 ## Manual Request
